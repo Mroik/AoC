@@ -8,12 +8,9 @@ type choice =
 
 let convert x =
     match x with
-    | "A" -> Rock
-    | "B" -> Paper
-    | "C" -> Scissors
-    | "X" -> Rock
-    | "Y" -> Paper
-    | "Z" -> Scissors
+    | "A" | "X" -> Rock
+    | "B" | "Y" -> Paper
+    | "C" | "Z" -> Scissors
     | _ -> raise Exception
 ;;
 
@@ -21,11 +18,11 @@ let calculate_win combination =
     let (oppo, me) = combination in
     let bonus = if oppo = me then 3 else 0 in
     match combination with
-    | (Scissors, Rock) -> 7 + bonus
+    | (Scissors, Rock) -> 7
     | (_, Rock) -> 1 + bonus
-    | (Rock, Paper) -> 8 + bonus
+    | (Rock, Paper) -> 8
     | (_, Paper) -> 2 + bonus
-    | (Paper, Scissors) -> 9 + bonus
+    | (Paper, Scissors) -> 9
     | (_, Scissors) -> 3 + bonus
 ;;
 
