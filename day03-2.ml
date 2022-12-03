@@ -8,8 +8,7 @@ let convert x =
         cc - 38
 ;;
 
-(* Produces a warning since `[]` is not matched *)
-let find_common (a :: b) =
+let [@warning "-8"] find_common (a :: b) =
     let contains v ll = List.exists (fun x -> x = v) ll in
     let rec loop ss =
         match ss with
@@ -37,14 +36,5 @@ let get_rucksacks () =
     loop [] []
 ;;
 
-let make_unique lst =
-    let rec loop acc ss =
-        match ss with
-        | [] -> acc
-        | a :: b -> if List.exists (fun x -> x = a) acc then acc else loop (a :: acc) b
-    in
-    loop [] lst
-;;
-
-let ris = get_rucksacks () |> List.map (fun x -> find_common x) |> List.fold_left (fun acc x -> acc + x) 0;;
+let ris = get_rucksacks () |> List.map (find_common) |> List.fold_left (fun acc x -> acc + x) 0;;
 print_endline (string_of_int ris);;
