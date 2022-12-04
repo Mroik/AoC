@@ -1,3 +1,11 @@
+let convert x =
+    let cc = Char.code x in
+    if cc >= 97 && cc <= 122 then
+        cc - 96
+    else
+        cc - 38
+;;
+
 let find_common rucksack =
     let l_rucksack = String.length rucksack in
     let t1 = String.sub rucksack 0 (l_rucksack / 2) in
@@ -6,7 +14,7 @@ let find_common rucksack =
     let b = List.init (String.length t2) (String.get t2) in
 
     let contains v ll = List.exists (fun x -> x = v) ll in
-    List.fold_left (fun acc x -> if contains x b then (x :: acc) else acc) [] a
+    List.fold_left (fun acc x -> if contains x b then (convert x :: acc) else acc) [] a
 ;;
 
 let get_rucksacks () =
@@ -17,14 +25,6 @@ let get_rucksacks () =
         | ss -> loop (ss :: acc)
     in
     loop []
-;;
-
-let convert x =
-    let cc = Char.code x in
-    if cc >= 97 && cc <= 122 then
-        cc - 96
-    else
-        cc - 38
 ;;
 
 let make_unique lst =
@@ -38,6 +38,6 @@ let make_unique lst =
 
 
 let sacks = get_rucksacks ();;
-let sums = List.map (fun x -> find_common x |> make_unique |> List.map (convert) |> List.fold_left (fun acc x -> acc + x) 0) sacks;;
+let sums = List.map (fun x -> find_common x |> make_unique |> List.fold_left (fun acc x -> acc + x) 0) sacks;;
 let ris = List.fold_left (fun acc x -> acc + x) 0 sums;;
 print_endline (string_of_int ris);;
