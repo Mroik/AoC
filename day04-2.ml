@@ -1,5 +1,3 @@
-exception Exception;;
-
 let get_pairs () =
     let ii = open_in "input.txt" in
     let rec loop acc =
