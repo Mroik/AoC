@@ -5,7 +5,7 @@ let rec debug stacks =
         match ss with
         | [] -> ()
         | a :: b ->
-            let () = print_string (String.init 1 (fun x -> a)) in
+            let () = String.init 1 (fun x -> a) |> print_string in
             inner b
     in
     match stacks with
@@ -21,12 +21,7 @@ let build_crates () =
     let rec strip_empty acc lst =
         match lst with
         | [] -> acc
-        | "" :: rest ->
-            begin
-            match rest with
-            | a :: b :: c :: rr -> strip_empty ([] :: acc) rr
-            | _ -> raise Exception
-            end
+        | "" :: rest -> let [@warning "-8"] _ :: _ :: _ :: rr = rest in strip_empty ([] :: acc) rr
         | a :: ss -> strip_empty ([(String.get a 1)] :: acc) ss
     in
 
@@ -44,19 +39,11 @@ let build_crates () =
     let rec update_stack acc stacks new_data target =
         match stacks with
         | [] -> List.rev acc
-        | a :: b ->
-            if target = 0 then
-                update_stack (new_data :: acc) b new_data (target - 1)
-            else
-                update_stack (a :: acc) b new_data (target - 1)
+        | a :: b when target = 0 -> update_stack (new_data :: acc) b new_data (target - 1)
+        | a :: b -> update_stack (a :: acc) b new_data (target - 1)
     in
 
-    let rec remove n ss =
-        if n = 0 then
-            ss
-        else
-            remove (n - 1) (List.tl ss)
-    in
+    let rec remove n ss = if n = 0 then ss else remove (n - 1) (List.tl ss) in
 
     let rec parse_commands stacks =
         (*
@@ -71,9 +58,10 @@ let build_crates () =
             let m = List.nth tokens 1 |> int_of_string in
             let f = (List.nth tokens 3 |> int_of_string) - 1 in
             let t = (List.nth tokens 5 |> int_of_string) - 1 in
-            let lifeted_crates = List.init m (List.nth (List.nth stacks f)) |> List.rev in
+            let from_stack = (List.nth stacks f) in
+            let lifeted_crates = List.init m (List.nth from_stack) |> List.rev in
             let new_stack_t = List.append lifeted_crates (List.nth stacks t) in
-            let new_stack_f = remove m (List.nth stacks f) in
+            let new_stack_f = remove m from_stack in
             let new_stacks = update_stack [] stacks new_stack_f f in
             parse_commands (update_stack [] new_stacks new_stack_t t)
     in
