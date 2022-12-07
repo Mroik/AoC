@@ -53,26 +53,26 @@ let parse_shell () =
     let rec loop root current_index index =
         match input_line ii with
         | exception End_of_file -> root
+        | line when String.get line 0 = '$' ->
+            begin
+            match String.sub line 0 4 with
+            | "$ cd" when String.get line 5 = '.' ->
+                let [@warning "-8"] Some new_curr = find_father root current_index in
+                loop root new_curr index
+            | "$ cd" ->
+                let [@warning "-8"] [_; _; name] = String.split_on_char ' ' line in
+                let new_root = add_node root current_index (Dir (index, name, [])) in
+                loop new_root index (index + 1)
+            | "$ ls" -> loop root current_index index
+            | _ -> raise Exception
+            end
         | line ->
-            if String.get line 0 = '$' then
-                match String.sub line 0 4 with
-                | "$ cd" ->
-                    if String.get line 5 = '.' then
-                        let [@warning "-8"] Some new_curr = find_father root current_index in
-                        loop root new_curr index
-                    else
-                        let [@warning "-8"] [_; _; name] = String.split_on_char ' ' line in
-                        let new_root = add_node root current_index (Dir (index, name, [])) in
-                        loop new_root index (index + 1)
-                | "$ ls" -> loop root current_index index
-                | _ -> raise Exception
+            let [@warning "-8"] [a; b] = String.split_on_char ' ' line in
+            if a = "dir" then
+                loop root current_index index
             else
-                let [@warning "-8"] [a; b] = String.split_on_char ' ' line in
-                if a = "dir" then
-                    loop root current_index index
-                else
-                    let new_root = add_node root current_index (File (index, b, int_of_string a)) in
-                    loop new_root current_index (index + 1)
+                let new_root = add_node root current_index (File (index, b, int_of_string a)) in
+                loop new_root current_index (index + 1)
     in
 
     loop (Dir (0, "/", [])) 0 1
@@ -106,8 +106,7 @@ and loop_debug ss =
 let rec calculate_fs_size root =
     match root with
     | File (_, _, size) -> size
-    | Dir (_, _, subs) ->
-        loop_calculate_fs_size 0 subs
+    | Dir (_, _, subs) -> loop_calculate_fs_size 0 subs
 and loop_calculate_fs_size acc ss =
     match ss with
     | [] -> acc
