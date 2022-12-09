@@ -8,27 +8,15 @@ type direction =
 ;;
 
 let next_tail_move h t =
+    let side n = if n > 0 then 1 else if n < 0 then -1 else 0 in
+
     let (hx, hy) = h in
     let (tx, ty) = t in
 
-    if hy - ty > 1 && hx - tx = 0 then
-        (tx, ty + 1)
-    else if (hx - tx > 1 && hy - ty > 0) || (hy - ty > 1 && hx - tx > 0) then
-        (tx + 1, ty + 1)
-    else if hx - tx > 1 && hy - ty = 0 then
-        (tx + 1, ty)
-    else if (hx - tx > 1 && hy - ty < 0) || (ty - hy > 1 && hx - tx > 0) then
-        (tx + 1, ty - 1)
-    else if ty - hy > 1 && tx - hx = 0 then
-        (tx, ty - 1)
-    else if (ty - hy > 1 && hx - tx < 0) || (tx - hx > 1 && hy - ty < 0) then
-        (tx - 1, ty - 1)
-    else if tx - hx > 1 && ty - hy = 0 then
-        (tx - 1, ty)
-    else if (hy - ty > 1 && hx - tx < 0) || (tx - hx > 1 && hy - ty > 0) then
-        (tx - 1, ty + 1)
-    else
+    if abs(hx - tx) <= 1 && abs(hy - ty) <= 1 then
         t
+    else
+        (hx - tx |> side |> (+) tx, hy - ty |> side |> (+) ty)
 ;;
 
 let rec loop_tail_move acc h t =
