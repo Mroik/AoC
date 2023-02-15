@@ -69,7 +69,7 @@ let parse_movement () =
             let new_acc = List.append t_moves acc in
             loop new_acc new_rope
     in
-    loop [(0, 0)] [(0, 0); (0, 0); (0, 0); (0, 0); (0, 0); (0, 0); (0, 0); (0, 0); (0, 0); (0, 0)]
+    List.init 10 (fun _ -> (0, 0)) |> loop [(0, 0)]
 ;;
 
 let make_unique ss = List.fold_left (fun acc x -> if List.exists (fun y -> x = y) acc then acc else x :: acc) [] ss;;
