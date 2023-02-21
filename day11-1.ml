@@ -58,7 +58,7 @@ let parse_input () =
 let calculate_worry monkey item =
     let Monkey (f, test, tt, ff) = monkey in
     let new_worry = (f item) / 3 in
-    let throw_to = if new_worry mod test == 0 then tt else ff in
+    let throw_to = if new_worry mod test = 0 then tt else ff in
     new_worry, throw_to
 ;;
 
@@ -94,6 +94,7 @@ let rec times monkeys queues many time =
     else
         let new_queues, new_many = round monkeys 0 many queues in
         times monkeys new_queues new_many (time + 1)
+;;
 
 
 let monkeys, queues = parse_input ();;
