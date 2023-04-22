@@ -5,37 +5,31 @@ fn main() {
     part2();
 }
 
-fn parse_commands(buf: String) -> Vec<u32> {
+fn parse_commands(buf: String, f_sizes: &mut Vec<u32>) {
     let mut i = 0;
-    let mut f_sizes: Vec<u32> = vec![];
     let mut stack: Vec<usize> = vec![];
 
     for line in buf.trim().split("\n") {
-        let ss = line.trim();
-        if ss.starts_with("dir") || ss.starts_with("$ ls") {
-            continue;
-        }
-
-        if ss.starts_with("$ cd ..") {
+        if line.starts_with("$ cd .") {
             stack.pop();
-        } else if ss.starts_with("$ cd") {
-            f_sizes.insert(f_sizes.len(), 0);
-            stack.insert(stack.len(), i);
+        } else if line.starts_with("$ c") {
+            f_sizes.push(0);
+            stack.push(i);
             i += 1;
-        } else {
-            let (size, _) = ss.split_once(" ").unwrap();
+        } else if line.chars().nth(0).unwrap().is_numeric() {
+            let (size, _) = line.split_once(" ").unwrap();
             for x in stack.as_slice() {
                 f_sizes[*x] += size.trim().parse::<u32>().unwrap();
             }
         }
     }
-    return f_sizes;
 }
 
 fn part1() {
     let buf = read_to_string("input.txt").unwrap();
     let mut tot = 0;
-    let f_sizes = parse_commands(buf);
+    let mut f_sizes = vec![];
+    parse_commands(buf, &mut f_sizes);
 
     for size in f_sizes.as_slice() {
         if *size <= 100000 {
@@ -47,7 +41,8 @@ fn part1() {
 
 fn part2() {
     let buf = read_to_string("input.txt").unwrap();
-    let f_sizes = parse_commands(buf);
+    let mut f_sizes = vec![];
+    parse_commands(buf, &mut f_sizes);
     let need_to_free = 30000000 - (70000000 - f_sizes[0]);
     let selected = f_sizes.iter().filter(|s| **s >= need_to_free).min().unwrap();
     println!("{selected}");
