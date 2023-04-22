@@ -17,9 +17,9 @@ fn parse_commands(buf: String, f_sizes: &mut Vec<u32>) {
             stack.push(i);
             i += 1;
         } else if line.chars().nth(0).unwrap().is_numeric() {
-            let (size, _) = line.split_once(" ").unwrap();
+            let size: u32 = line.split_once(" ").unwrap().0.trim().parse().unwrap();
             for x in stack.as_slice() {
-                f_sizes[*x] += size.trim().parse::<u32>().unwrap();
+                f_sizes[*x] += size;
             }
         }
     }
