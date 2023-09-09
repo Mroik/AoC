@@ -1,8 +1,8 @@
 let max_calories inventories =
-    let sums = List.map (fun x -> List.fold_left (fun acc v -> acc + v) 0 x) inventories
+    let sums = List.map (fun x -> List.fold_left (+) 0 x) inventories
     |> List.sort (fun x y -> y - x) in
     let top_3 = List.init 3 (fun x -> List.nth sums x) in
-    List.fold_left (fun acc x -> acc + x) 0 top_3
+    List.fold_left (+) 0 top_3
 ;;
 
 let make_inventories () =

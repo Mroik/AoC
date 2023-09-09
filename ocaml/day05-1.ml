@@ -29,7 +29,7 @@ let build_crates () =
     let rec parse_crates stacks =
         let line = input_line ii in
         if contains_number line then
-            List.map (fun x -> List.rev x) stacks |> List.rev
+            List.map (List.rev) stacks |> List.rev
         else
             let to_add = String.split_on_char ' ' line |> strip_empty [] in
             let new_stacks = List.map2 (fun x y -> match y with [] -> x | s :: _ -> s :: x) stacks to_add in

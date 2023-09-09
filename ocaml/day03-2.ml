@@ -15,7 +15,7 @@ let [@warning "-8"] find_common (a :: b) =
         | [] -> raise Exception
         | x :: xs ->
             let temp = List.map (contains x) b in
-            if List.fold_left (fun acc x -> acc && x) true temp then
+            if List.fold_left (&&) true temp then
                 convert x
             else
                 loop xs
@@ -36,5 +36,5 @@ let get_rucksacks () =
     loop [] []
 ;;
 
-let ris = get_rucksacks () |> List.map (find_common) |> List.fold_left (fun acc x -> acc + x) 0;;
+let ris = get_rucksacks () |> List.map (find_common) |> List.fold_left (+) 0;;
 print_endline (string_of_int ris);;
