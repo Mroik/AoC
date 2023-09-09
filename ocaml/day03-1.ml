@@ -38,6 +38,6 @@ let make_unique lst =
 
 
 let sacks = get_rucksacks ();;
-let sums = List.map (fun x -> find_common x |> make_unique |> List.fold_left (fun acc x -> acc + x) 0) sacks;;
-let ris = List.fold_left (fun acc x -> acc + x) 0 sums;;
+let sums = List.map (fun x -> find_common x |> make_unique |> List.fold_left (+) 0) sacks;;
+let ris = List.fold_left (+) 0 sums;;
 print_endline (string_of_int ris);;
