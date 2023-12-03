@@ -14,11 +14,8 @@ let rec is_possible games =
 
     match games with
     | [] -> true
-    | game :: xs ->
-        if is_possible_single game then
-            is_possible xs
-        else
-            false
+    | game :: xs when is_possible_single game -> is_possible xs
+    | _ -> false
 ;;
 
 let parse_game data =
