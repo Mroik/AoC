@@ -18,9 +18,9 @@ let find_sym schema =
                 |> List.filter (fun x -> x > -1)
                 |> List.map (fun x -> (n, x))
             in
-            loop (acc @ sym_in_line) (n + 1) xs
+            loop (sym_in_line :: acc) (n + 1) xs
     in
-    loop [] 0 schema
+    loop [] 0 schema |> List.concat
 ;;
 
 let find_nums schema =
