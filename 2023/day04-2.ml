@@ -18,9 +18,9 @@ let parse_cards () =
         try
             let card = read_line () |> parse_card in
             loop (card :: acc)
-        with End_of_file -> acc
+        with End_of_file -> acc |> List.rev
     in
-    loop [] |> List.rev
+    loop []
 ;;
 
 let pile_value cards =
@@ -44,8 +44,7 @@ let pile_value cards =
             let (stot, new_cache) =
                 match IMap.find_opt sid cache with
                 | Some a -> (a, cache)
-                | None ->
-                    tot_of 0 cache (sid, srv)
+                | None -> tot_of 0 cache (sid, srv)
             in
             tot_of (acc + stot + 1) new_cache (id, xs)
     in
