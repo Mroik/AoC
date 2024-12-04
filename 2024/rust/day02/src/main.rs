@@ -3,11 +3,9 @@ use std::fs::read_to_string;
 fn part1() {
     let buf = read_to_string("input").unwrap();
     let ris = buf
+        .trim()
         .split('\n')
         .map(|line| {
-            if line.trim() == "" {
-                return false;
-            }
             let mut it = line.split(' ').map(|v| v.parse::<i32>().unwrap());
             let mut prev = (it.next().unwrap(), 0);
             for x in it {
@@ -31,11 +29,9 @@ fn part1() {
 fn part2() {
     let buf = read_to_string("input").unwrap();
     let ris = buf
+        .trim()
         .split('\n')
         .map(|line| {
-            if line.trim() == "" {
-                return false;
-            }
             let it: Vec<i32> = line.split(' ').map(|v| v.parse::<i32>().unwrap()).collect();
             (0..it.len())
                 .map(|i| {
