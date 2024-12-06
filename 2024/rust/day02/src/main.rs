@@ -33,6 +33,7 @@ fn part2() {
         .split('\n')
         .map(|line| {
             let it: Vec<i32> = line.split(' ').map(|v| v.parse::<i32>().unwrap()).collect();
+            // This can be done in linear time but I can't be bothered
             (0..it.len())
                 .map(|i| {
                     let mut ii = it.clone();
