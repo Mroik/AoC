@@ -82,6 +82,8 @@ fn simul(map: &Vec<Vec<char>>, start: (usize, usize), xp: usize, yp: usize) -> b
     let mut dir = 0;
     let mut current = start;
     loop {
+        // Apparently checking steps up to N is faster than
+        // checking againts an HashSet
         steps += 1;
         if steps > map.len() * map.len() {
             return true;
