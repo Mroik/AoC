@@ -81,8 +81,7 @@ fn part2() {
             }
             return false;
         })
-        .map(|update| {
-            let mut u = update.clone();
+        .map(|mut u| {
             u.sort_by(|a, b| {
                 if let Some(v) = rules.get(b) {
                     if v.contains(a) {
