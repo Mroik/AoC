@@ -25,6 +25,8 @@ fn part1() {
                 .split(',')
                 .map(|v| v.parse::<u32>().unwrap())
                 .collect();
+            // If we really wanted to, this could be done in N + N * log(N) by sorting first
+            // and then doing a comparison of the sorted and unsorted vectors
             for x in 0..update.len() - 1 {
                 for y in x + 1..update.len() {
                     let left = update.get(x).unwrap();
@@ -68,6 +70,8 @@ fn part2() {
                 .collect()
         })
         .filter(|update: &Vec<u32>| {
+            // If we really wanted to, this could be done in N + N * log(N) by sorting first
+            // and then doing a comparison of the sorted and unsorted vectors
             for x in 0..update.len() - 1 {
                 for y in x + 1..update.len() {
                     let left = update.get(x).unwrap();
