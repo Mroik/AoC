@@ -15,9 +15,14 @@ fn ff2(target: u64, acc: u64, vs: &[u64]) -> bool {
     }
     let s = ff2(target, acc + vs[0], &vs[1..]);
     let m = ff2(target, acc * vs[0], &vs[1..]);
-    let mut c_temp = acc.to_string();
-    c_temp.push_str(vs[0].to_string().as_str());
-    let c = ff2(target, c_temp.parse().unwrap(), &vs[1..]);
+    let mut c_temp = 0;
+    let mut vv = vs[0];
+    while vv > 0 {
+        vv /= 10;
+        c_temp += 1;
+    }
+    c_temp = 10_u64.pow(c_temp as u32) * acc + vs[0];
+    let c = ff2(target, c_temp, &vs[1..]);
     return s || m || c;
 }
 
@@ -36,10 +41,12 @@ fn part1() {
                 .split(' ')
                 .map(|v| v.parse().unwrap())
                 .collect();
-            (target, nums)
+            if ff(target, 0, &nums) {
+                target
+            } else {
+                0
+            }
         })
-        .filter(|(t, n)| ff(*t, 0, n))
-        .map(|(t, _)| t)
         .sum();
     println!("{}", ris);
 }
@@ -59,10 +66,12 @@ fn part2() {
                 .split(' ')
                 .map(|v| v.parse().unwrap())
                 .collect();
-            (target, nums)
+            if ff2(target, 0, &nums) {
+                target
+            } else {
+                0
+            }
         })
-        .filter(|(t, n)| ff2(*t, 0, n))
-        .map(|(t, _)| t)
         .sum();
     println!("{}", ris);
 }
