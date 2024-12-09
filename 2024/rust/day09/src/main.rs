@@ -81,8 +81,15 @@ fn part2() {
     // This could be faster with a linked list. But it's too much
     // effort for this.
     let mut cur = memory.len() - 1;
+    let mut start = 0;
     loop {
-        for i in 0..cur {
+        while start < cur {
+            match memory.get(start).unwrap() {
+                Block2::Empty(n) if *n > 0 => break,
+                _ => start += 1,
+            }
+        }
+        for i in start..cur {
             let left = memory.get(i).unwrap();
             let right = memory.get(cur).unwrap();
             let (l, r, should) = match (left, right) {
