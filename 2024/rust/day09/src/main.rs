@@ -66,7 +66,11 @@ fn part2() {
         .enumerate()
         .for_each(|(i, size)| {
             let data = if i % 2 == 1 {
-                Block2::Empty((size as u8 - '0' as u8) as usize)
+                let dd = size as u8 - '0' as u8;
+                if dd == 0 {
+                    return;
+                }
+                Block2::Empty(dd as usize)
             } else {
                 let d = Block2::Filled(block_id, (size as u8 - '0' as u8) as usize);
                 block_id += 1;
@@ -74,10 +78,6 @@ fn part2() {
             };
             memory.push(data);
         });
-    memory.retain(|b| match b {
-        Block2::Empty(0) => false,
-        _ => true,
-    });
 
     let mut cur = memory.len() - 1;
     loop {
