@@ -81,28 +81,29 @@ fn part2() {
 
     let mut cur = memory.len() - 1;
     loop {
-        for i in 0..memory.len() {
-            if i >= cur {
-                break;
-            }
-            match (
-                memory.get(i).copied().unwrap(),
-                memory.get(cur).copied().unwrap(),
-            ) {
-                (_, Block2::Empty(_)) => (),
-                (Block2::Filled(_, _), _) => (),
+        for i in 0..cur {
+            let left = memory.get(i).unwrap();
+            let right = memory.get(cur).unwrap();
+            let (l, r, should) = match (left, right) {
+                (_, Block2::Empty(_)) => (0, 0, false),
+                (Block2::Filled(_, _), _) => (0, 0, false),
                 (Block2::Empty(e_n), Block2::Filled(_, f_n)) => {
                     if e_n >= f_n {
-                        std::mem::swap(&mut Block2::Empty(f_n), memory.get_mut(i).unwrap());
-                        memory.swap(cur, i);
-                        let remain = e_n - f_n;
-                        if remain > 0 {
-                            memory.insert(i + 1, Block2::Empty(remain));
-                            cur += 1;
-                        }
-                        break;
+                        (*e_n, *f_n, true)
+                    } else {
+                        (0, 0, false)
                     }
                 }
+            };
+            if should {
+                std::mem::swap(&mut Block2::Empty(r), memory.get_mut(i).unwrap());
+                memory.swap(cur, i);
+                let remain = l - r;
+                if remain > 0 {
+                    memory.insert(i + 1, Block2::Empty(remain));
+                    cur += 1;
+                }
+                break;
             }
         }
         if cur == 0 {
