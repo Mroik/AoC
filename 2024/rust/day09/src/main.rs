@@ -22,8 +22,8 @@ fn part1() {
                 block_id += 1;
                 d
             };
-            let size = size as u8 - '0' as u8;
-            memory.extend((0..size as usize).map(|_| data.clone()));
+            let size = size.to_digit(10).unwrap();
+            memory.extend((0..size).map(|_| data.clone()));
         });
     let mut left = 0;
     let mut right = memory.len() - 1;
@@ -64,14 +64,14 @@ fn part2() {
         .chars()
         .enumerate()
         .for_each(|(i, size)| {
+            let size = size.to_digit(10).unwrap() as usize;
+            if size == 0 {
+                return;
+            }
             let data = if i % 2 == 1 {
-                let dd = size as u8 - '0' as u8;
-                if dd == 0 {
-                    return;
-                }
-                Block2::Empty(dd as usize)
+                Block2::Empty(size)
             } else {
-                let d = Block2::Filled(block_id, (size as u8 - '0' as u8) as usize);
+                let d = Block2::Filled(block_id, size);
                 block_id += 1;
                 d
             };
@@ -119,7 +119,7 @@ fn part2() {
         .map(|block| {
             let (r, s) = match block {
                 Block2::Empty(s) => (0, *s),
-                Block2::Filled(v, s) => ((base..(base + s)).map(|i| (i as u64) * *v).sum(), *s),
+                Block2::Filled(v, s) => ((base..base + s).map(|i| (i as u64) * *v).sum(), *s),
             };
             base += s;
             return r;
