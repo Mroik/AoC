@@ -1,6 +1,6 @@
 use std::fs::read_to_string;
 
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 enum Block {
     Empty,
     Filled(u64),
@@ -23,7 +23,7 @@ fn part1() {
                 d
             };
             let size = size as u8 - '0' as u8;
-            memory.extend((0..size as usize).map(|_| data));
+            memory.extend((0..size as usize).map(|_| data.clone()));
         });
     let mut left = 0;
     let mut right = memory.len() - 1;
@@ -50,7 +50,6 @@ fn part1() {
     println!("{}", ris);
 }
 
-#[derive(Clone, Copy)]
 enum Block2 {
     Empty(usize),
     Filled(u64, usize),
