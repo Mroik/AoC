@@ -111,20 +111,16 @@ fn part2() {
         cur -= 1;
     }
 
-    let mut mem = Vec::new();
-    memory.iter().for_each(|b| {
-        let (v, ss) = match b {
-            Block2::Empty(s) => (Block::Empty, s),
-            Block2::Filled(a, s) => (Block::Filled(*a), s),
-        };
-        mem.extend((0..*ss).map(|_| v));
-    });
-    let ris: u64 = mem
+    let mut base = 0;
+    let ris: u64 = memory
         .iter()
-        .enumerate()
-        .map(|(pos, block)| match block {
-            Block::Empty => 0,
-            Block::Filled(id) => id * pos as u64,
+        .map(|block| {
+            let (r, s) = match block {
+                Block2::Empty(s) => (0, *s),
+                Block2::Filled(v, s) => ((base..(base + s)).map(|i| (i as u64) * *v).sum(), *s),
+            };
+            base += s;
+            return r;
         })
         .sum();
     println!("{}", ris);
