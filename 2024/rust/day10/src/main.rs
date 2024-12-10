@@ -100,6 +100,11 @@ fn trail_tree(step: u8, x: usize, y: usize, map: &Vec<Vec<u8>>) -> u32 {
     return ris;
 }
 
+// If the maps in the input were bigger we could optimize the solution
+// by using the same technique of part1 but instead of starting from the
+// head of the trail (0) we'd start from the tail (9). We'd just have to
+// add a field with the sum of the trails, instead of using a vector or
+// a double linked list we could use a hashmap.
 fn part2() {
     let mut starts = Vec::new();
     let map: Vec<Vec<u8>> = read_to_string("input")
