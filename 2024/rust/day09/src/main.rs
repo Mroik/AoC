@@ -78,8 +78,6 @@ fn part2() {
             memory.push(data);
         });
 
-    // This could be faster with a linked list. But it's too much
-    // effort for this.
     let mut cur = memory.len() - 1;
     let mut start = 0;
     loop {
