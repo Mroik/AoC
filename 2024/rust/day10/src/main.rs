@@ -1,5 +1,5 @@
 use std::{
-    collections::{HashSet, LinkedList},
+    collections::{HashSet, VecDeque},
     fs::read_to_string,
 };
 
@@ -7,7 +7,7 @@ fn extract(data: &Vec<Vec<u8>>, x: usize, y: usize) -> u8 {
     data.get(y).unwrap().get(x).copied().unwrap()
 }
 
-fn find_paths(process: &mut LinkedList<(u8, usize, usize)>, map: &Vec<Vec<u8>>) -> u32 {
+fn find_paths(process: &mut VecDeque<(u8, usize, usize)>, map: &Vec<Vec<u8>>) -> u32 {
     for step in 0..9 {
         for _ in 0..process.iter().filter(|(v, _, _)| *v == step).count() {
             let (cur, x, y) = process.pop_front().unwrap();
@@ -67,7 +67,7 @@ fn part1() {
     let ris: u32 = starts
         .iter()
         .map(|(x, y)| {
-            let mut v = LinkedList::new();
+            let mut v = VecDeque::new();
             v.push_back((0, *x, *y));
             find_paths(&mut v, &map)
         })
