@@ -7,9 +7,8 @@ fn blink(n: u64, step: u8, cache: &mut HashMap<(u64, u8), u64>) -> u64 {
     if n == 0 {
         return blink(1, step - 1, cache);
     }
-    match cache.get(&(n, step)) {
-        Some(v) => return *v,
-        None => (),
+    if let Some(v) = cache.get(&(n, step)) {
+        return *v;
     }
     let cl = ((n as f64).log10().floor() + 1.0) as u64;
     if cl % 2 == 1 {
