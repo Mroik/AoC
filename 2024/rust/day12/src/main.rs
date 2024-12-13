@@ -163,6 +163,61 @@ fn coords(
     }
 }
 
+fn discounted_perimeter(
+    map: &Vec<Vec<char>>,
+    visited: &mut Vec<Vec<bool>>,
+    seed_type: char,
+    x: usize,
+    y: usize,
+) -> u64 {
+    let mut coor = HashSet::new();
+    coords(map, visited, seed_type, x, y, &mut coor);
+    let mut ris = 0;
+    coor.iter().for_each(|(x, y)| {
+        let (x, y) = (*x, *y);
+        // Hori top side
+        if !coor.contains(&(x - 1, y)) && !coor.contains(&(x, y - 1)) {
+            ris += 1;
+        } else if coor.contains(&(x - 1, y))
+            && coor.contains(&(x - 1, y - 1))
+            && !coor.contains(&(x, y - 1))
+        {
+            ris += 1;
+        }
+
+        // Hori bot side
+        if !coor.contains(&(x - 1, y)) && !coor.contains(&(x, y + 1)) {
+            ris += 1;
+        } else if coor.contains(&(x - 1, y))
+            && coor.contains(&(x - 1, y + 1))
+            && !coor.contains(&(x, y + 1))
+        {
+            ris += 1;
+        }
+
+        // Vert left side
+        if !coor.contains(&(x, y - 1)) && !coor.contains(&(x - 1, y)) {
+            ris += 1;
+        } else if coor.contains(&(x, y - 1))
+            && coor.contains(&(x - 1, y - 1))
+            && !coor.contains(&(x - 1, y))
+        {
+            ris += 1;
+        }
+
+        // Vert right side
+        if !coor.contains(&(x, y - 1)) && !coor.contains(&(x + 1, y)) {
+            ris += 1;
+        } else if coor.contains(&(x, y - 1))
+            && coor.contains(&(x + 1, y - 1))
+            && !coor.contains(&(x + 1, y))
+        {
+            ris += 1;
+        }
+    });
+    return ris;
+}
+
 fn part2() {
     let map: Vec<Vec<char>> = read_to_string("input")
         .unwrap()
@@ -194,54 +249,7 @@ fn part2() {
         .map(|(y, line)| {
             line.iter()
                 .enumerate()
-                .map(|(x, plot)| {
-                    let mut coor = HashSet::new();
-                    coords(&map, &mut visited, *plot, x, y, &mut coor);
-                    let mut ris = 0;
-                    coor.iter().for_each(|(x, y)| {
-                        let (x, y) = (*x, *y);
-                        // Hori top side
-                        if !coor.contains(&(x - 1, y)) && !coor.contains(&(x, y - 1)) {
-                            ris += 1;
-                        } else if coor.contains(&(x - 1, y))
-                            && coor.contains(&(x - 1, y - 1))
-                            && !coor.contains(&(x, y - 1))
-                        {
-                            ris += 1;
-                        }
-
-                        // Hori bot side
-                        if !coor.contains(&(x - 1, y)) && !coor.contains(&(x, y + 1)) {
-                            ris += 1;
-                        } else if coor.contains(&(x - 1, y))
-                            && coor.contains(&(x - 1, y + 1))
-                            && !coor.contains(&(x, y + 1))
-                        {
-                            ris += 1;
-                        }
-
-                        // Vert left side
-                        if !coor.contains(&(x, y - 1)) && !coor.contains(&(x - 1, y)) {
-                            ris += 1;
-                        } else if coor.contains(&(x, y - 1))
-                            && coor.contains(&(x - 1, y - 1))
-                            && !coor.contains(&(x - 1, y))
-                        {
-                            ris += 1;
-                        }
-
-                        // Vert right side
-                        if !coor.contains(&(x, y - 1)) && !coor.contains(&(x + 1, y)) {
-                            ris += 1;
-                        } else if coor.contains(&(x, y - 1))
-                            && coor.contains(&(x + 1, y - 1))
-                            && !coor.contains(&(x + 1, y))
-                        {
-                            ris += 1;
-                        }
-                    });
-                    return ris;
-                })
+                .map(|(x, plot)| discounted_perimeter(&map, &mut visited, *plot, x, y))
                 .collect()
         })
         .collect();
