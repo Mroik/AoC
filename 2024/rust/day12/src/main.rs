@@ -176,41 +176,37 @@ fn discounted_perimeter(
     coor.iter().for_each(|(x, y)| {
         let (x, y) = (*x, *y);
         // Hori top side
-        if !coor.contains(&(x - 1, y)) && !coor.contains(&(x, y - 1)) {
-            ris += 1;
-        } else if coor.contains(&(x - 1, y))
-            && coor.contains(&(x - 1, y - 1))
-            && !coor.contains(&(x, y - 1))
+        if (!coor.contains(&(x - 1, y)) && !coor.contains(&(x, y - 1)))
+            || (coor.contains(&(x - 1, y))
+                && coor.contains(&(x - 1, y - 1))
+                && !coor.contains(&(x, y - 1)))
         {
             ris += 1;
         }
 
         // Hori bot side
-        if !coor.contains(&(x - 1, y)) && !coor.contains(&(x, y + 1)) {
-            ris += 1;
-        } else if coor.contains(&(x - 1, y))
-            && coor.contains(&(x - 1, y + 1))
-            && !coor.contains(&(x, y + 1))
+        if (!coor.contains(&(x - 1, y)) && !coor.contains(&(x, y + 1)))
+            || (coor.contains(&(x - 1, y))
+                && coor.contains(&(x - 1, y + 1))
+                && !coor.contains(&(x, y + 1)))
         {
             ris += 1;
         }
 
         // Vert left side
-        if !coor.contains(&(x, y - 1)) && !coor.contains(&(x - 1, y)) {
-            ris += 1;
-        } else if coor.contains(&(x, y - 1))
-            && coor.contains(&(x - 1, y - 1))
-            && !coor.contains(&(x - 1, y))
+        if (!coor.contains(&(x, y - 1)) && !coor.contains(&(x - 1, y)))
+            || (coor.contains(&(x, y - 1))
+                && coor.contains(&(x - 1, y - 1))
+                && !coor.contains(&(x - 1, y)))
         {
             ris += 1;
         }
 
         // Vert right side
-        if !coor.contains(&(x, y - 1)) && !coor.contains(&(x + 1, y)) {
-            ris += 1;
-        } else if coor.contains(&(x, y - 1))
-            && coor.contains(&(x + 1, y - 1))
-            && !coor.contains(&(x + 1, y))
+        if (!coor.contains(&(x, y - 1)) && !coor.contains(&(x + 1, y)))
+            || (coor.contains(&(x, y - 1))
+                && coor.contains(&(x + 1, y - 1))
+                && !coor.contains(&(x + 1, y)))
         {
             ris += 1;
         }
