@@ -1,4 +1,4 @@
-use std::{collections::BTreeSet, fs::read_to_string};
+use std::{collections::VecDeque, fs::read_to_string};
 
 fn part1() {
     let map: Vec<Vec<bool>> = read_to_string("input")
@@ -75,11 +75,11 @@ fn part2() {
         .collect();
     let height = map.len();
     let width = map[0].len();
-    let mut rolls = BTreeSet::new();
+    let mut rolls = VecDeque::new();
     for y in 0..height {
         for x in 0..width {
             if map[y][x] {
-                rolls.insert((x, y));
+                rolls.push_back((x, y));
             }
         }
     }
@@ -87,8 +87,7 @@ fn part2() {
     let mut ris: u64 = 0;
 
     while !rolls.is_empty() {
-        let (x, y) = rolls.iter().next().copied().unwrap();
-        rolls.remove(&(x, y));
+        let (x, y) = rolls.pop_front().unwrap();
         if !map[y][x] {
             continue;
         }
@@ -139,7 +138,7 @@ fn part2() {
         if adj < 4 {
             map[y][x] = false;
             to_add.iter().for_each(|&v| {
-                rolls.insert(v);
+                rolls.push_back(v);
             });
             ris += 1;
             continue;
