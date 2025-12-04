@@ -86,13 +86,14 @@ fn part2() {
 
     let mut ris: u64 = 0;
 
+    let mut to_add = Vec::new();
     while !rolls.is_empty() {
         let (x, y) = rolls.pop_front().unwrap();
         if !map[y][x] {
             continue;
         }
 
-        let mut to_add = Vec::new();
+        to_add.clear();
 
         let mut adj = 0;
         if x != 0 && y != 0 && map[y - 1][x - 1] {
