@@ -1,4 +1,4 @@
-use std::{fs::read_to_string, mem::swap, time::Instant};
+use std::{cmp::Ordering, fs::read_to_string, mem::swap, time::Instant};
 
 fn meld(range: (u64, u64), other: (u64, u64)) -> Option<(u64, u64)> {
     if range.0 > other.1 || range.1 < other.0 {
@@ -16,7 +16,7 @@ fn meld(range: (u64, u64), other: (u64, u64)) -> Option<(u64, u64)> {
     if other.0 <= range.0 && other.1 <= range.1 {
         return Some((other.0, range.1));
     }
-    return None;
+    unreachable!()
 }
 
 fn part1() {
@@ -54,22 +54,45 @@ fn part1() {
         });
     drop(to_add);
 
+    fresh.sort_by(|(a_l, a_r), (b_l, b_r)| {
+        if a_r < b_l {
+            return Ordering::Less;
+        }
+        if a_l > b_r {
+            return Ordering::Greater;
+        }
+        if a_l <= b_l && a_r <= b_r {
+            return Ordering::Less;
+        }
+        if a_l >= b_l && a_r >= b_r {
+            return Ordering::Greater;
+        }
+        if a_l <= b_l && a_r >= b_r {
+            return Ordering::Less;
+        }
+        if a_l >= b_l && a_r <= b_r {
+            return Ordering::Greater;
+        }
+        Ordering::Equal
+    });
+
+    let mut start = 0;
     'outie: loop {
-        for x in 0..fresh.len() - 1 {
-            for y in x + 1..fresh.len() {
-                match meld(fresh[x], fresh[y]) {
-                    Some(v) => {
-                        fresh.remove(y);
-                        fresh.remove(x);
-                        fresh.push(v);
-                        continue 'outie;
-                    }
-                    None => (),
+        for x in start..fresh.len() - 1 {
+            match meld(fresh[x], fresh[x + 1]) {
+                Some(v) => {
+                    fresh.remove(x + 1);
+                    fresh.push(v);
+                    fresh.swap_remove(x);
+                    start = x;
+                    continue 'outie;
                 }
+                None => (),
             }
         }
         break;
     }
+
     let mut ingredients: Vec<u64> = source
         .next()
         .unwrap()
@@ -131,18 +154,40 @@ fn part2() {
         });
     drop(to_add);
 
+    fresh.sort_by(|(a_l, a_r), (b_l, b_r)| {
+        if a_r < b_l {
+            return Ordering::Less;
+        }
+        if a_l > b_r {
+            return Ordering::Greater;
+        }
+        if a_l <= b_l && a_r <= b_r {
+            return Ordering::Less;
+        }
+        if a_l >= b_l && a_r >= b_r {
+            return Ordering::Greater;
+        }
+        if a_l <= b_l && a_r >= b_r {
+            return Ordering::Less;
+        }
+        if a_l >= b_l && a_r <= b_r {
+            return Ordering::Greater;
+        }
+        Ordering::Equal
+    });
+
+    let mut start = 0;
     'outie: loop {
-        for x in 0..fresh.len() - 1 {
-            for y in x + 1..fresh.len() {
-                match meld(fresh[x], fresh[y]) {
-                    Some(v) => {
-                        fresh.remove(y);
-                        fresh.remove(x);
-                        fresh.push(v);
-                        continue 'outie;
-                    }
-                    None => (),
+        for x in start..fresh.len() - 1 {
+            match meld(fresh[x], fresh[x + 1]) {
+                Some(v) => {
+                    fresh.remove(x + 1);
+                    fresh.push(v);
+                    fresh.swap_remove(x);
+                    start = x;
+                    continue 'outie;
                 }
+                None => (),
             }
         }
         break;
