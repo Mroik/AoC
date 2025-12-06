@@ -100,7 +100,6 @@ fn part1() {
         .map(|v| v.parse().unwrap())
         .collect();
 
-    fresh.sort_by_key(|v| v.1);
     ingredients.sort();
 
     let mut start = 0;
