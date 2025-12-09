@@ -64,20 +64,21 @@ fn part2() {
         });
 
     let mut biggest = 0;
-    for i in 0..coords_n - 1 {
-        for i2 in i + 1..coords_n {
-            let (x1, y1) = coords[i];
-            let (x2, y2) = coords[i2];
-            let area = (x1.abs_diff(x2) + 1) * (y1.abs_diff(y2) + 1);
-            if !perimeter
-                .iter()
-                .any(|&(x, y)| x1.min(x2) < x && x < x1.max(x2) && y1.min(y2) < y && y < y1.max(y2))
-                && area > biggest
-            {
-                biggest = area;
-            }
-        }
-    }
+    coords
+        .iter()
+        .take(coords_n - 1)
+        .enumerate()
+        .for_each(|(i, &(x1, y1))| {
+            coords.iter().skip(i + 1).for_each(|&(x2, y2)| {
+                let area = (x1.abs_diff(x2) + 1) * (y1.abs_diff(y2) + 1);
+                if !perimeter.iter().any(|&(x, y)| {
+                    x1.min(x2) < x && x < x1.max(x2) && y1.min(y2) < y && y < y1.max(y2)
+                }) && area > biggest
+                {
+                    biggest = area;
+                }
+            });
+        });
 
     println!("{}", biggest);
 }
