@@ -3,7 +3,7 @@ use std::{collections::HashMap, fs::read_to_string};
 const TO_CONSIDER: usize = 1000;
 
 fn distance((x1, y1, z1): (u64, u64, u64), (x2, y2, z2): (u64, u64, u64)) -> f64 {
-    (((x1 - x2).pow(2) + (y1 - y2).pow(2) + (z1 - z2).pow(2)) as f64).sqrt()
+    ((x1.abs_diff(x2).pow(2) + y1.abs_diff(y2).pow(2) + z1.abs_diff(z2).pow(2)) as f64).sqrt()
 }
 
 fn find(boxes: &mut [(usize, (u64, u64, u64))], i: usize) -> usize {
